@@ -1,9 +1,27 @@
-import 'package:coinfy/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'provider/provider.dart'; // adjust the path to your PriceProvider file
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Run after build to ensure provider is available.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // use context.read to invoke a one-time call
+      debugPrint('Dashboard: calling fetchPrices from initState');
+      context.read<PriceProvider>().fetchPrices().catchError((e) {
+        debugPrint('Dashboard: fetchPrices error: $e');
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +31,13 @@ class DashboardScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('SOL/USDT Dashboard'), centerTitle: true),
       body: Center(
         child: provider.highPrice == null
-            ? ElevatedButton(onPressed: () => provider.fetchPrices(), child: const Text("Fetch Prices"))
+            ? ElevatedButton(
+                onPressed: () {
+                  debugPrint('Fetch button pressed');
+                  provider.fetchPrices();
+                },
+                child: const Text("Fetch Prices"),
+              )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
