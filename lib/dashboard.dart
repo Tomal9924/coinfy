@@ -41,9 +41,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Highest Price (24h): ${provider.highPrice} USDT', style: const TextStyle(fontSize: 20)),
+                  Text.rich(
+                    TextSpan(
+                      text: 'Highest Price : ',
+                      style: const TextStyle(fontSize: 14),
+                      children: [
+                        TextSpan(
+                          text: '\$ ${provider.highPrice}',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 10),
-                  Text('Lowest Price (24h): ${provider.lowPrice} USDT', style: const TextStyle(fontSize: 20)),
+                  Text.rich(
+                    TextSpan(
+                      text: 'Lowest Price : ',
+                      style: const TextStyle(fontSize: 14),
+                      children: [
+                        TextSpan(
+                          text: '\$ ${provider.lowPrice}',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text.rich(
+                    TextSpan(
+                      text: 'Current Price : ',
+                      style: const TextStyle(fontSize: 14),
+                      children: [
+                        TextSpan(
+                          text: '\$ ${provider.currentPrice}',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   ElevatedButton(onPressed: () => provider.fetchPrices(), child: const Text('Refresh')),
                 ],

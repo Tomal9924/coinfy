@@ -22,21 +22,17 @@ void callbackDispatcher() {
 
     if (task == fetchTask) {
       try {
-        final response = await http.get(
-          Uri.parse('https://api.binance.com/api/v3/ticker/24hr?symbol=SOLUSDT'),
-        );
+        final response = await http.get(Uri.parse('https://api.binance.com/api/v3/ticker/24hr?symbol=SOLUSDT'));
 
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
-          final high = data['highPrice'];
-          final low = data['lowPrice'];
+          final high = double.tryParse(data['highPrice'] ?? '0')?.toStringAsFixed(2);
+          final low = double.tryParse(data['lowPrice'] ?? '0')?.toStringAsFixed(2);
+          final currentPrice = double.tryParse(data['lastPrice'] ?? '0')?.toStringAsFixed(2);
 
-          debugPrint('Workmanager: fetched high=$high, low=$low');
+          debugPrint('Workmanager: fetched high=$high, low=$low, current=$currentPrice');
 
-          await NotificationService.showNotification(
-            title: 'SOL/USDT Update',
-            body: 'High: $high | Low: $low',
-          );
+          await NotificationService.showNotification(title: 'SOL/USDT Update', body: 'H: $high | L: $low | C: $currentPrice');
         } else {
           debugPrint('Workmanager: HTTP error: ${response.statusCode}');
         }
