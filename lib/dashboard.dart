@@ -17,7 +17,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // use context.read to invoke a one-time call
       debugPrint('Dashboard: calling fetchPrices from initState');
-      context.read<PriceProvider>().fetchPrices().catchError((e) {
+      context.read<PriceProvider>().fetchPrices(forceNotify: true).catchError((e) {
         debugPrint('Dashboard: fetchPrices error: $e');
       });
     });
